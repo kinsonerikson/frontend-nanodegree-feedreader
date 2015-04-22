@@ -26,14 +26,20 @@ $(function() {
             expect(allFeeds.length).not.toBe(0);
         });
 		
-		it('has a defined/filled url', function() {
+		/* This test loops through all of the feeds and makes sure they 
+		 * all have a url variable and the url variable has content.
+		 */
+		it('have a defined/filled url', function() {
 			for(var i=0;i<allFeeds.length;i++){
 				expect(allFeeds[i].url).toBeDefined();
 				expect(allFeeds[i].url).not.toBe('');				
 			}
 		});
-		 
-		 it('has a defined/filled name', function() {
+		
+		/* This test loops through all of the feeds and makes sure they 
+		 * all have a name variable and the name variable has content.
+		 */ 
+		it('have a defined/filled name', function() {
 			for(var i=0;i<allFeeds.length;i++){
 				expect(allFeeds[i].name).toBeDefined();
 				expect(allFeeds[i].name).not.toBe('');				
@@ -41,37 +47,66 @@ $(function() {
 		});
     });
 	
+	// This suite is for testing the functionality of the menu 	
 	describe('The menu', function() {
+		
+		// This tests makes sure that the menu is hidden by default when the page first loads.
 		it('should have the menu hidden by default', function() {
 			expect($('body').hasClass('menu-hidden')).toBe(true);	
 		});	
 		
+		/* This test makes sure that when you first click the menu button the menu is shown.
+		 * A second press should hide the menu
+		 */
 		it('should open/close the menu when the menu button is clicked', function() {
-			
+			$('.menu-icon-link').click();
+			expect($('body').hasClass('menu-hidden')).toBe(false);
+			$('.menu-icon-link').click();
+			expect($('body').hasClass('menu-hidden')).toBe(true);
+		});
+	});        
+	
+	// This suite tests the initial setup of the feed list
+	describe('Initial Entries', function() {
+		/* Since this is an Async request, we need to do it a little differently.
+		 * You have to do a beforeEach and pass it a done function.
+		 * This way jasmine will wait for the function to complete before running
+		 * the test.
+		 */
+		beforeEach(function(done){
+			loadFeed(0,done);
 		});
 		
+		/* After the test runs we need to verify there is at least
+		 * one .entry in the .feed container
+		 */
+		it('should have at least one entry', function(done) {			
+			expect($('.feed .entry').length > 0).toBe(true);
+			done();
+		});
 	});
-        
-
-         /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
-          */
-
-    /* TODO: Write a new test suite named "Initial Entries" */
-
-        /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test wil require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
-
-    /* TODO: Write a new test suite named "New Feed Selection"
-
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
+	
+	// This suite tests that when a new feed is picked, the container updates
+	describe('New Feed Selection', function() {
+		/* Since this is an Async request, we need to do it a little differently.
+		 * You have to do a beforeEach and pass it a done function.
+		 * This way jasmine will wait for the function to complete before running
+		 * the test. Also we need to set the initial content of the .feed container
+		 * into a variable for later comparison.
+		 */
+		var firstContent = $('.feed').html();		
+		beforeEach(function(done){
+			loadFeed(1);
+			secondContent = $('.feed').html();
+			done();
+		});	
+		
+		/* After the test runs we need to verify the content of the .feed box
+		 * has been changed to the new content.
+		 */
+		it('should change the content when a new feed is picked', function(done) {			
+			expect(firstContent !== secondContent).toBe(true);				
+			done();
+		});
+	});
 }());
