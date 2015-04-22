@@ -94,18 +94,20 @@ $(function() {
 		 * the test. Also we need to set the initial content of the .feed container
 		 * into a variable for later comparison.
 		 */
-		var firstContent = $('.feed').html();		
+		var firstContent = $('.feed').html();
+		var secondContent = "";		
 		beforeEach(function(done){
-			loadFeed(1);
-			secondContent = $('.feed').html();
-			done();
+			loadFeed(1,function(){
+				secondContent = $('.feed').html();
+				done();
+			});			
 		});	
 		
 		/* After the test runs we need to verify the content of the .feed box
 		 * has been changed to the new content.
 		 */
 		it('should change the content when a new feed is picked', function(done) {			
-			expect(firstContent !== secondContent).toBe(true);				
+			expect(firstContent !== secondContent).toBe(true);
 			done();
 		});
 	});
