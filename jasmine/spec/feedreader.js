@@ -94,12 +94,15 @@ $(function() {
 		 * the test. Also we need to set the initial content of the .feed container
 		 * into a variable for later comparison.
 		 */
-		var firstContent = $('.feed').html();
+ 		var firstContent = "";
 		var secondContent = "";		
 		beforeEach(function(done){
-			loadFeed(1,function(){
-				secondContent = $('.feed').html();
-				done();
+			loadFeed(0,function(){
+				firstContent = $('.feed').html();
+				loadFeed(1,function(){
+					secondContent = $('.feed').html();
+					done();
+				});
 			});			
 		});	
 		
