@@ -80,9 +80,8 @@ $(function() {
 		/* After the test runs we need to verify there is at least
 		 * one .entry in the .feed container
 		 */
-		it('should have at least one entry', function(done) {			
-			expect($('.feed .entry').length > 0).toBe(true);
-			done();
+		it('should have at least one entry', function() {			
+			expect($('.feed .entry').length > 0).toBe(true);			
 		});
 	});
 	
@@ -109,9 +108,8 @@ $(function() {
 		/* After the test runs we need to verify the content of the .feed box
 		 * has been changed to the new content.
 		 */
-		it('should change the content when a new feed is picked', function(done) {			
+		it('should change the content when a new feed is picked', function() {			
 			expect(firstContent !== secondContent).toBe(true);
-			done();
 		});
 	});
 }());
